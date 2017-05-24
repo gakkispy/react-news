@@ -25,9 +25,14 @@ module.exports = {
     path: __dirname,
     filename: "./src/bundle.js"
   },
-  plugins: debug ? [] : [
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
+  plugins:[
+    new webpack.DefinePlugin({ // <-- 减少 React 大小的关键
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.DedupePlugin(), //删除类似的重复代码
+    new webpack.optimize.UglifyJsPlugin(), //最小化一切
+    new webpack.optimize.AggressiveMergingPlugin()//合并块
   ],
 };
